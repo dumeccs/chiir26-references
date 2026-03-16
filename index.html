@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>References — Measuring What Matters | CHIIR '26</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📄</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Hanken+Grotesk:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --midnight: #0D1B2A;
+    --navy: #1B2D45;
+    --steel: #3E5C76;
+    --amber: #E8A838;
+    --teal: #4ECDC4;
+    --white: #FAFBFC;
+    --off-white: #E8ECF0;
+    --light-gray: #B8C4D0;
+    --mid-gray: #7A8EA0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--midnight);
+    color: var(--off-white);
+    font-family: 'Hanken Grotesk', sans-serif;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .top-bar {
+    height: 4px;
+    background: linear-gradient(90deg, var(--amber), var(--teal), var(--amber));
+  }
+
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(78,205,196,0.1);
+    border: 1px solid rgba(78,205,196,0.25);
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--teal);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+
+  h1 .accent { color: var(--amber); }
+  h1 .accent2 { color: var(--teal); }
+
+  .subtitle {
+    font-size: 16px;
+    color: var(--mid-gray);
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+
+  .authors {
+    font-size: 14px;
+    color: var(--light-gray);
+    margin-bottom: 8px;
+  }
+
+  .authors strong { color: var(--white); }
+
+  .doi-link {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--teal);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(78,205,196,0.3);
+    transition: border-color 0.2s;
+  }
+
+  .doi-link:hover { border-color: var(--teal); }
+
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--amber), var(--steel), transparent);
+    margin: 32px 0;
+  }
+
+  .ref-list {
+    list-style: none;
+    counter-reset: refs;
+  }
+
+  .ref-item {
+    counter-increment: refs;
+    display: flex;
+    gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    align-items: flex-start;
+  }
+
+  .ref-item:last-child { border-bottom: none; }
+
+  .ref-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--amber);
+    flex-shrink: 0;
+    width: 28px;
+    text-align: right;
+    padding-top: 2px;
+  }
+
+  .ref-text {
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--light-gray);
+  }
+
+  .ref-text strong {
+    color: var(--off-white);
+    font-weight: 600;
+  }
+
+  .ref-text em {
+    font-style: italic;
+    color: var(--off-white);
+  }
+
+  .ref-text a {
+    color: var(--teal);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(78,205,196,0.25);
+    word-break: break-all;
+    transition: border-color 0.2s;
+  }
+
+  .ref-text a:hover { border-color: var(--teal); }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 40px;
+    padding: 10px 20px;
+    background: rgba(232,168,56,0.1);
+    border: 1px solid rgba(232,168,56,0.25);
+    border-radius: 8px;
+    color: var(--amber);
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+
+  .back-link:hover { background: rgba(232,168,56,0.18); }
+
+  .footer-note {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    font-size: 12px;
+    color: var(--mid-gray);
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 600px) {
+    .container { padding: 32px 16px 60px; }
+    h1 { font-size: 24px; }
+    .ref-item { gap: 12px; }
+    .ref-num { width: 22px; font-size: 12px; }
+    .ref-text { font-size: 13.5px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-bar"></div>
+
+<div class="container">
+
+  <span class="badge">CHIIR '26 · Demo Paper</span>
+
+  <h1>
+    Measuring What <span class="accent">Matters</span>: Aligning System-Level RAG Metrics with <span class="accent2">User Trust</span>
+  </h1>
+
+  <p class="subtitle">References for the CHIIR 2026 Demonstration Paper</p>
+
+  <p class="authors">
+    <strong>Paul Momoh</strong> &amp; <strong>Julius Odede</strong> — University of Wolverhampton
+  </p>
+
+  <a href="https://doi.org/10.1145/3786304.3787918" class="doi-link" target="_blank">DOI: 10.1145/3786304.3787918</a>
+
+  <div class="divider"></div>
+
+  <ol class="ref-list">
+
+    <li class="ref-item">
+      <span class="ref-num">[1]</span>
+      <div class="ref-text">
+        <strong>Magali A. Delmas and Vanessa Cuny Burbano.</strong> 2011. The Drivers of Greenwashing. <em>California Management Review</em> 54, 1 (2011), 64–87.
+      </div>
+    </li>
+
+    <li class="ref-item">
+      <span class="ref-num">[2]</span>
+      <div class="ref-text">
+        <strong>David Edge, Ha Trinh, Newman Cheng, John Bradley, Andy Chao, A. Mody, S. Truitt, D. Metropolitansky, R. O. Ness, and J. Larson.</strong> 2024. From Local to Global: A Graph RAG Approach to Query-Focused Summarization. <em>arXiv preprint</em> arXiv:2404.16130. <a href="https://arxiv.org/abs/2404.16130" target="_blank">arxiv.org/abs/2404.16130</a>
+      </div>
+    </li>
+
+    <li class="ref-item">
+      <span class="ref-num">[3]</span>
+      <div class="ref-text">
+        <strong>Yunfan Gao, Yun Xiong, Xinyu Gao, Kangning Jia, Jinlin Pan, Yiyang Bi, Yimei Dai, Jiaming Sun, Meng Wang, and Haofen Wang.</strong> 2023. Retrieval-Augmented Generation for Large Language Models: A Survey. <em>arXiv preprint</em> arXiv:2312.10997. <a href="https://arxiv.org/abs/2312.10997" target="_blank">arxiv.org/abs/2312.10997</a>
+      </div>
+    </li>
+
+    <li class="ref-item">
+      <span class="ref-num">[4]</span>
+      <div class="ref-text">
+        <strong>Tunga Gokhan, Kang-In Wang, Iryna Gurevych, and Ted Briscoe.</strong> 2024. RIRAG: Regulatory Information Retrieval and Answer Generation. <em>arXiv preprint</em> arXiv:2409.05677. <a href="https://arxiv.org/abs/2409.05677" target="_blank">arxiv.org/abs/2409.05677</a>
+      </div>
+    </li>
+
+    <li class="ref-item">
+      <span class="ref-num">[5]</span>
+      <div class="ref-text">
+        <strong>Lukas Hillebrand, Alexander Berger, Dominik Uedelhoven, David Berghaus, Uta Warning, Taha Dilmaghani, Bjoern Kliem, Thomas Schmid, Robert Loitz, and Riza Sifa.</strong> 2024. Advancing Risk and Quality Assurance: A RAG Chatbot for Improved Regulatory Compliance. In <em>2024 IEEE International Conference on Big Data (BigData)</em>. 8668–8670.
+      </div>
+    </li>
+
+    <li class="ref-item">
+      <span class="ref-num">[6]</span>
+      <div class="ref-text">
+        <strong>Jaeyoung Kim and Myeonghwi Min.</strong> 2024. From RAG to QA-RAG: Integrating Generative AI for Pharmaceutical Regulatory Compliance Process. <em>arXiv preprint</em> arXiv:2402.01717. <a href="https://arxiv.org/abs/2402.01717" target="_blank">arxiv.org/abs/2402.01717</a>
+      </div>
+    </li>
+
+    <li class="ref-item">
+      <span class="ref-num">[7]</span>
+      <div class="ref-text">
+        <strong>Patrick Lewis, Ethan Perez, Aleksandara Piktus, Fabio Petroni, Vladimir Karpukhin, Naman Goyal, Heinrich Küttler, Mike Lewis, Wen-tau Yih, Tim Rocktäschel, Sebastian Riedel, and Douwe Kiela.</strong> 2020. Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks. In <em>Advances in Neural Information Processing Systems 33</em>. 9459–9474. <a href="https://arxiv.org/abs/2005.11401" target="_blank">arxiv.org/abs/2005.11401</a>
+      </div>
+    </li>
+
+    <li class="ref-item">
+      <span class="ref-num">[8]</span>
+      <div class="ref-text">
+        <strong>Xinbei Ma, Yeyun Gong, Pengcheng He, Hai Zhao, and Nan Duan.</strong> 2023. Query Rewriting for Retrieval-Augmented Large Language Models. In <em>Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing</em>. 5303–5315. <a href="https://arxiv.org/abs/2305.14283" target="_blank">arxiv.org/abs/2305.14283</a>
+      </div>
+    </li>
+
+    <li class="ref-item">
+      <span class="ref-num">[9]</span>
+      <div class="ref-text">
+        <strong>Ali Masoudifard, Mohammad Mahdi Sorond, Mahdi Madadi, Mehrdad Sabokrou, and Ebrahim Habibi.</strong> 2024. Leveraging Graph-RAG and Prompt Engineering to Enhance LLM-Based Automated Requirement Traceability and Compliance Checks. <em>arXiv preprint</em> arXiv:2412.08593. <a href="https://arxiv.org/abs/2412.08593" target="_blank">arxiv.org/abs/2412.08593</a>
+      </div>
+    </li>
+
+    <li class="ref-item">
+      <span class="ref-num">[10]</span>
+      <div class="ref-text">
+        <strong>Paul Momoh.</strong> 2025. Knowledge Graph-Retrieval Augmented Generation for ESG Compliance Regulation - A Focus on Greenwashing. <em>Master's thesis</em>, University of Wolverhampton. Source code: <a href="https://github.com/dumeccs/Anti-greenwashing-graphrag" target="_blank">github.com/dumeccs/Anti-greenwashing-graphrag</a>
+      </div>
+    </li>
+
+    <li class="ref-item">
+      <span class="ref-num">[11]</span>
+      <div class="ref-text">
+        <strong>Jakob Nielsen.</strong> 1994. <em>Usability Engineering</em>. Morgan Kaufmann Publishers Inc., San Francisco, CA, USA.
+      </div>
+    </li>
+
+    <li class="ref-item">
+      <span class="ref-num">[12]</span>
+      <div class="ref-text">
+        <strong>Jithin James, Shahul Es, Luis Espinosa-Anke, and Steven Schockaert.</strong> 2023. Evaluation of Retrieval Augmented Generation. <em>arXiv preprint</em> arXiv:2309.15217. <a href="https://arxiv.org/abs/2309.15217" target="_blank">arxiv.org/abs/2309.15217</a>
+      </div>
+    </li>
+
+    <li class="ref-item">
+      <span class="ref-num">[13]</span>
+      <div class="ref-text">
+        <strong>Adam Szymanski, Nripsuta Ziems, Heather A. Eicher-Miller, Terence L. Jia-Jun Li, and Min Jiang.</strong> 2024. Limitations of the LLM-as-a-Judge Approach for Evaluating LLM Outputs in Expert Knowledge Tasks. <em>arXiv preprint</em> arXiv:2410.20266. <a href="https://arxiv.org/abs/2410.20266" target="_blank">arxiv.org/abs/2410.20266</a>
+      </div>
+    </li>
+
+    <li class="ref-item">
+      <span class="ref-num">[14]</span>
+      <div class="ref-text">
+        <strong>Jiateng Wu, Jing Zhu, Yujia Qi, Jiajun Chen, Minglong Xu, F. Menolascina, and V. Grau.</strong> 2024. Medical Graph RAG: Towards Safe Medical Large Language Model via Graph Retrieval-Augmented Generation. <em>arXiv preprint</em> arXiv:2408.04187. <a href="https://arxiv.org/abs/2408.04187" target="_blank">arxiv.org/abs/2408.04187</a>
+      </div>
+    </li>
+
+    <li class="ref-item">
+      <span class="ref-num">[15]</span>
+      <div class="ref-text">
+        <strong>Julius Odede and Ingo Frommholz.</strong> 2024. JayBot – Aiding university students and admission with an LLM-based chatbot. In <em>Proceedings of the 2024 Conference on Human Information Interaction and Retrieval (CHIIR '24)</em>, Sheffield, UK. ACM, New York, NY, USA. 391–395.
+      </div>
+    </li>
+
+  </ol>
+
+  <a href="https://graph-rag-ui.vercel.app/" class="back-link" target="_blank">
+    🌐 Try Eloh Live
+  </a>
+
+  <div class="footer-note">
+    CHIIR '26, March 22–26, 2026, Seattle, WA, USA<br>
+    © 2026 Copyright held by the owner/author(s). Licensed under CC BY 4.0<br>
+    ACM ISBN 979-8-4007-2414-5/26/03 · <a href="https://doi.org/10.1145/3786304.3787918" style="color:var(--teal);text-decoration:none;border-bottom:1px solid rgba(78,205,196,0.3);" target="_blank">doi.org/10.1145/3786304.3787918</a>
+  </div>
+
+</div>
+
+</body>
+</html>
